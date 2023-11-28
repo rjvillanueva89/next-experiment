@@ -5,8 +5,8 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  User,
   Revenue,
+  User,
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -227,5 +227,57 @@ export async function getUser(email: string) {
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function fetchTotalPaidInvoices() {
+  try {
+    const data = await sql`
+      SELECT SUM(amount) from "invoices" where "status" = 'paid'
+    `;
+
+    return data.rows[0].sum;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch invoices table.');
+  }
+}
+
+export async function fetchTotalPendingInvoices() {
+  try {
+    const data = await sql`
+      SELECT SUM(amount) from "invoices" where "status" = 'pending'
+    `;
+
+    return data.rows[0].sum;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch invoices table.');
+  }
+}
+
+export async function fetchNumberOfInvoices() {
+  try {
+    const data = await sql`
+      SELECT COUNT(*) from "invoices"
+    `;
+
+    return data.rows[0].count;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch invoices table.');
+  }
+}
+
+export async function fetchNumberOfCustomers() {
+  try {
+    const data = await sql`
+      SELECT COUNT(*) from "customers"
+    `;
+
+    return data.rows[0].count;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch invoices table.');
   }
 }

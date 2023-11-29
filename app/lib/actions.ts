@@ -73,3 +73,24 @@ export async function deleteInvoice(id: string) {
   }
   revalidatePath('/dashboard/invoices');
 }
+
+type RegisterUser = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export async function registerUser(user: RegisterUser) {
+  try {
+    await sql`
+    INSERT INTO users (name, email, password)
+    VALUES (${user.name}, ${user.email}, ${user.password})
+  `;
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
+
+  redirect('/login');
+}

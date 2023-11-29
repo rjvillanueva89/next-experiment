@@ -1,15 +1,36 @@
+'use client';
+
 import { lusitana } from '@/app/ui/fonts';
-import {
-  AtSymbolIcon,
-  KeyIcon,
-  ExclamationCircleIcon,
-} from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { AtSymbolIcon, KeyIcon } from '@heroicons/react/24/outline';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Button } from './button';
 
+const FormSchema = z.object({
+  identifier: z.string().email().min(1),
+  password: z.string().min(6),
+});
+
+type FormInputs = z.infer<typeof FormSchema>;
+
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormInputs>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const onSubmit = handleSubmit((data: FormInputs) => {
+    signIn('credentials', { ...data, callbackUrl: '/dashboard' });
+  });
+
   return (
-    <form className="space-y-3">
+    <form onSubmit={onSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
@@ -27,9 +48,8 @@ export default function LoginForm() {
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="email"
                 type="email"
-                name="email"
                 placeholder="Enter your email address"
-                required
+                {...register('identifier')}
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
@@ -46,10 +66,9 @@ export default function LoginForm() {
                 className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="password"
                 type="password"
-                name="password"
                 placeholder="Enter password"
-                required
                 minLength={6}
+                {...register('password')}
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>

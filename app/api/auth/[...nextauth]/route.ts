@@ -21,14 +21,46 @@ const handler = NextAuth({
       authorize: async (credentials) => {
         const { identifier, password } = credentials || {};
 
-        const { id, name, email } = await authUser(identifier!, password!);
+        const user = await authUser(identifier!, password!);
 
-        if (!id) return null;
+        if (!user) return null;
 
-        return { id, name, email };
+        return user;
       },
     }),
   ],
+  // callbacks: {
+  //   jwt: async ({ token, user }) => {
+  //     const userToken = {
+  //       ...token,
+  //       id: user.id,
+  //     };
+
+  //     console.log('userToken');
+  //     console.log(userToken);
+
+  //     return Promise.resolve(userToken);
+  //   },
+  //   session: async ({ session, token }) => {
+  //     const sessionResponse: Session = {
+  //       ...session,
+  //       user: {
+  //         id: token.sub!,
+  //         name: token.name!,
+  //         email: token.email!,
+  //       },
+  //     };
+
+  //     console.log('session');
+  //     console.log(sessionResponse);
+
+  //     return Promise.resolve(sessionResponse);
+  //   },
+  // },
+  pages: {
+    signIn: '/login',
+    signOut: '/',
+  },
 });
 
 export { handler as GET, handler as POST };

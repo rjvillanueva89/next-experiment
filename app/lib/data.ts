@@ -286,3 +286,14 @@ export async function fetchNumberOfCustomers() {
     throw new Error('Failed to fetch invoices table.');
   }
 }
+
+export async function authUser(email: string, password: string) {
+  try {
+    const user =
+      await sql`SELECT * FROM users WHERE email=${email} AND password=${password}`;
+    return user.rows[0] as User;
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}

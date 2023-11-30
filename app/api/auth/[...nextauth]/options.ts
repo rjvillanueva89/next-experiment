@@ -1,4 +1,4 @@
-import { authUser } from '@/app/lib/data';
+import { authUser } from '@/actions/auth-user';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -21,7 +21,10 @@ export const options: NextAuthOptions = {
       authorize: async (credentials) => {
         const { identifier, password } = credentials || {};
 
-        const user = await authUser(identifier!, password!);
+        const user = await authUser({
+          email: identifier!,
+          password: password!,
+        });
 
         if (!user) return null;
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { createUser } from '@/actions/create-user';
 import {
   ArrowRightIcon,
   AtSymbolIcon,
@@ -9,7 +10,6 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { registerUser } from '../lib/actions';
 import { Button } from './button';
 import { lusitana } from './fonts';
 
@@ -37,7 +37,7 @@ export default function RegisterForm() {
   });
 
   const onSubmit = handleSubmit((data: FormInputs) => {
-    registerUser(data);
+    createUser(data);
   });
 
   return (

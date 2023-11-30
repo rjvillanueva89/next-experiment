@@ -83,14 +83,14 @@ type RegisterUser = {
 export async function registerUser(user: RegisterUser) {
   try {
     await sql`
-    INSERT INTO users (name, email, password)
-    VALUES (${user.name}, ${user.email}, ${user.password})
-  `;
+      INSERT INTO users (name, email, password)
+      VALUES (${user.name}, ${user.email}, ${user.password})
+    `;
+
+    redirect('/login');
   } catch (error) {
     return {
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
-
-  redirect('/login');
 }

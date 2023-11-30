@@ -1,16 +1,29 @@
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 
+const SECURED_PATHS = [
+  '/dashboard',
+  '/dashboard/invoices',
+  '/dashboard/customers',
+];
+const AUTH_PATHS = ['/', '/login', '/register'];
+
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
-    console.log(request.nextUrl.pathname);
-    console.log(request.nextauth.token);
-
+    // if user is logged out
     if (
-      request.nextUrl.pathname.startsWith('/dashboard') &&
+      SECURED_PATHS.includes(request.nextUrl.pathname) &&
       !request.nextauth.token
     ) {
       return NextResponse.redirect(new URL('/', request.url));
+    }
+
+    // if user is logged in
+    if (
+      AUTH_PATHS.includes(request.nextUrl.pathname) &&
+      request.nextauth.token
+    ) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   },
   {

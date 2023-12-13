@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { useState } from 'react';
 import { useTodosStore } from '../store/useTodosStore';
 
@@ -31,8 +32,16 @@ export default function TodosPage() {
         {todosStore.todos.map((todo, key) => {
           return (
             <div key={key} className="flex items-center gap-4 p-4">
-              <span className="grow">{todo.description}</span>
-              <button>complete</button>
+              <span className={clsx('grow', todo.done && 'line-through')}>
+                {todo.description}
+              </span>
+              <button
+                onClick={() => {
+                  todosStore.complete(todo.id);
+                }}
+              >
+                complete
+              </button>
               <button
                 onClick={() => {
                   todosStore.delete(todo.id);

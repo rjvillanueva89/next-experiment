@@ -64,6 +64,9 @@ export default function RegisterForm() {
               />
               <UserIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.name?.message && (
+              <small className="text-red-500">{errors.name?.message}</small>
+            )}
           </div>
           <div>
             <label
@@ -82,6 +85,9 @@ export default function RegisterForm() {
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.email?.message && (
+              <small className="text-red-500">{errors.email?.message}</small>
+            )}
           </div>
           <div className="mt-4">
             <label
@@ -101,6 +107,9 @@ export default function RegisterForm() {
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.password?.message && (
+              <small className="text-red-500">{errors.password?.message}</small>
+            )}
           </div>
           <div className="mt-4">
             <label
@@ -120,6 +129,11 @@ export default function RegisterForm() {
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+            {errors.confirm_password?.message && (
+              <small className="text-red-500">
+                {errors.confirm_password?.message}
+              </small>
+            )}
           </div>
         </div>
         <Button className="mt-4 w-full" type="submit">
